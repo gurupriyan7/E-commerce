@@ -3,3 +3,7 @@ export interface AddedToCartData {
   userId: string
   quantity: number
 }
+
+export interface UpdateCartData extends AddedToCartData {
+  inc?: boolean
+}
