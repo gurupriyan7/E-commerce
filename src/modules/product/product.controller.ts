@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { productService } from './product.service'
 import { responseUtils } from '../../utils/response-utils'
+import { getPaginationOptions } from '../../utils/paginationUtils'
 
 const addProduct = async (req: Request, res: Response) => {
   try {
@@ -16,7 +17,16 @@ const addProduct = async (req: Request, res: Response) => {
 
 const getAllProducts = async (req: Request, res: Response) => {
   try {
-    const data = await productService.getAllProducts()
+    const paginationOptions = getPaginationOptions({
+      limit: req.query.limit,
+      page: req.query.page,
+    })
+    const data = await productService.getAllProducts({
+      options: {
+        ...paginationOptions,
+        sort: { updatedAt: -1},
+      },
+    })
     return responseUtils.success(res, {
       data,
       status: 200,
@@ -28,5 +38,5 @@ const getAllProducts = async (req: Request, res: Response) => {
 
 export const productController = {
   addProduct,
-  getAllProducts
+  getAllProducts,
 }
