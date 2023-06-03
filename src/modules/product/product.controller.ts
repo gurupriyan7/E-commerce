@@ -1,11 +1,10 @@
 import { Request, Response } from 'express'
-
-import { userService } from './user.service'
+import { productService } from './product.service'
 import { responseUtils } from '../../utils/response-utils'
 
-const createUser = async (req: Request, res: Response) => {
+const addProduct = async (req: Request, res: Response) => {
   try {
-    const data = await userService.createUser(req.body)
+    const data = await productService.addProduct(req.body)
     return responseUtils.success(res, {
       data,
       status: 201,
@@ -15,9 +14,9 @@ const createUser = async (req: Request, res: Response) => {
   }
 }
 
-const userLogin = async (req: Request, res: Response) => {
+const getAllProducts = async (req: Request, res: Response) => {
   try {
-    const data = await userService.userLogin(req.body)
+    const data = await productService.getAllProducts()
     return responseUtils.success(res, {
       data,
       status: 200,
@@ -27,7 +26,7 @@ const userLogin = async (req: Request, res: Response) => {
   }
 }
 
-export const userController = {
-  createUser,
-  userLogin,
+export const productController = {
+  addProduct,
+  getAllProducts
 }

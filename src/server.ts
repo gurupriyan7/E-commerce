@@ -1,6 +1,7 @@
 import express from 'express'
 import { errorHandler } from './middlewares/errorHandler';
-import userRoutes from "./routes/userRouter"
+import userRoutes from "./routes/userRouter";
+import productRoutes from "./routes/productRouter";
 import { appConfig } from './config/appConfig';
 import cors from "cors";
 import { connectDb } from './utils/dbConnection';
@@ -12,7 +13,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors())
 
 connectDb()
+
 app.use("/api/user",userRoutes)
+app.use("/api/product",productRoutes)
 
 app.use(errorHandler);
 

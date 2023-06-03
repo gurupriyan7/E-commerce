@@ -1,10 +1,9 @@
-import mongoose, { Document, Schema } from 'mongoose'
+import mongoose, { Schema } from 'mongoose'
 
 const UserSchema: Schema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    unique: true,
   },
   email: {
     type: String,
