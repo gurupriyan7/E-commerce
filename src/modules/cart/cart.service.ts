@@ -44,8 +44,8 @@ const addedToCart = async (cartData: AddedToCartData) => {
 }
 
 const getCartByUserId = async (userId: string) => {
-  const data = await cartModel.findOne({ userId })
-
+  const data = await cartModel.findOne({ userId }).populate({path:"items.prodId"})
+  
   if (!data) {
     throw new Error('Empty Cart')
   }

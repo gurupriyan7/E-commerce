@@ -1,8 +1,10 @@
 import express from 'express'
 import { cartController } from '../modules/cart/cart.controller'
+import { authMiddleware } from '../middlewares/authMiddleWare'
 
 const router = express.Router()
 
+const {protect}=authMiddleware
 const {
   addedToCart,
   getCartByUserId,
@@ -10,9 +12,9 @@ const {
   updateCart,
 } = cartController
 
-router.post('/', addedToCart)
-router.get('/:userId', getCartByUserId)
-router.patch('/remove/:userId', removeProductFromCart)
-router.patch('/:userId', updateCart)
+router.post('/',protect, addedToCart)
+router.get('/user',protect, getCartByUserId)
+router.patch('/remove',protect, removeProductFromCart)
+router.patch('/',protect, updateCart)
 
 export default router

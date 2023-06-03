@@ -1,5 +1,5 @@
 import mongoose, { Document, ObjectId, Schema } from 'mongoose'
-const ObjectId = Schema.Types.ObjectId
+const ObjectId = mongoose.Types.ObjectId
 
 export interface CartItems extends Document {
   prodId: ObjectId

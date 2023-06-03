@@ -1,18 +1,14 @@
-// import { isProduction } from '../utils/appUtils';
-import { Request, Response, NextFunction } from 'express'
+import { NextFunction, Request, Response } from 'express'
 
 export const errorHandler = (
-  err: Error,
-  req: Request,
+  error:Error,
+  _req: Request,
   res: Response,
-  next: NextFunction,
+  _next:NextFunction
 ) => {
   const statusCode = res.statusCode ? res.statusCode : 500
 
-  res.status(statusCode)
-
-  res.json({
-    message: err.message,
-    // stack: isProduction() ? null : err.stack,
-  })
+  console.log(res,error.message);
+  
+  res.status(statusCode).json({message:error.message})
 }

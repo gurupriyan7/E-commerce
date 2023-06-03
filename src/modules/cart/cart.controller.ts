@@ -1,10 +1,11 @@
 import { Request, Response } from 'express'
 import { responseUtils } from '../../utils/response-utils'
 import { cartService } from './cart.service'
+import { RequestType } from 'constants/types'
 
-const addedToCart = async (req: Request, res: Response) => {
-  try {
-    const data = await cartService.addedToCart(req.body)
+const addedToCart = async (req: RequestType, res: Response) => {
+  try { 
+    const data = await cartService.addedToCart({...req.body,userId:req?.user?._id})
     return responseUtils.success(res, {
       data,
       status: 200,
@@ -14,9 +15,12 @@ const addedToCart = async (req: Request, res: Response) => {
   }
 }
 
-const getCartByUserId = async (req:Request,res:Response)=>{
+const getCartByUserId = async (req:RequestType,res:Response)=>{
   try {
-    const data = await cartService.getCartByUserId(req.params.userId)
+    if(!req?.user){
+      throw new Error("User Not found")
+    }
+    const data = await cartService.getCartByUserId(req?.user?._id)
     return responseUtils.success(res, {
       data,
       status: 200,
@@ -26,11 +30,14 @@ const getCartByUserId = async (req:Request,res:Response)=>{
   }
 }
 
-const removeProductFromCart = async ( req:Request,res:Response)=>{
+const removeProductFromCart = async ( req:RequestType,res:Response)=>{
   try {
+    if(!req?.user){
+      throw new Error("User Not Found")
+    }
     const {prodId}=req.query
     if(prodId){
-      const data = await cartService.removeProductFromCart(req.params.userId,prodId as string)
+      const data = await cartService.removeProductFromCart(req.user?._id,prodId as string)
       return responseUtils.success(res, {
         data,
         status: 200,
@@ -41,11 +48,14 @@ const removeProductFromCart = async ( req:Request,res:Response)=>{
   }
 }
 
-const updateCart = async (req:Request,res:Response)=>{
+const updateCart = async (req:RequestType,res:Response)=>{
   try {
+    if(!req?.user){
+      throw new Error("User Not Found")
+    }
     const { prodId, inc=false, quantity } = req.query
     const data = await cartService.updateCart({
-      userId: req.params.userId,
+      userId: req.user?._id,
       prodId: prodId as string,
      inc : inc as boolean,
       quantity :quantity as unknown as number,
