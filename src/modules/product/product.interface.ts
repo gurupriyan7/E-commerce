@@ -1,5 +1,5 @@
-import { FilterQuery, QueryOptions } from "mongoose";
-import productModel from "./product.model";
+import { FilterQuery, QueryOptions } from 'mongoose'
+import productModel from './product.model'
 
 export interface AddProduct {
   name: string
@@ -11,7 +11,7 @@ export interface AddProduct {
   urgentSelling?: boolean
 }
 
-export interface getAllProductsProps{
-query?:FilterQuery<typeof productModel>,
-options?: QueryOptions;
+export interface getAllProductsProps {
+  query?: FilterQuery<typeof productModel>
+  options?: QueryOptions
 }

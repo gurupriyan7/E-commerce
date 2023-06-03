@@ -7,7 +7,7 @@ const addedToCart = async (req: Request, res: Response) => {
     const data = await cartService.addedToCart(req.body)
     return responseUtils.success(res, {
       data,
-      status: 201,
+      status: 200,
     })
   } catch (error:any) {
     return responseUtils.error({ res, error })
