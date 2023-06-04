@@ -1,9 +1,5 @@
-export interface AddedToCartData {
+export interface CartData {
   prodId: string
   userId: string
   quantity: number
-}
-
-export interface UpdateCartData extends AddedToCartData {
-  inc?: boolean
 }

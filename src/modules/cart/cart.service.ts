@@ -1,9 +1,9 @@
 import mongoose from 'mongoose'
-import { AddedToCartData, UpdateCartData } from './cart.interface'
+import { CartData } from './cart.interface'
 import cartModel, { CartItems } from './cart.model'
 const ObjectId = mongoose.Types.ObjectId
 
-const addedToCart = async (cartData: AddedToCartData) => {
+const addedToCart = async (cartData: CartData) => {
   const { userId, prodId, quantity } = cartData
   const itemObj = {
     prodId,
@@ -97,60 +97,14 @@ const removeProductFromCart = async (userId: string, prodId: string) => {
   }
 }
 
-const updateCart = async ({ userId, inc, prodId }: UpdateCartData) => {
-  const data = await cartModel.aggregate([
-    { $match: { userId: new ObjectId(userId) } },
+const updateCart = async ({ userId,quantity, prodId }: CartData) => {
+  await cartModel.updateOne(
+    { userId, 'items.prodId': prodId },
     {
-      $unwind: {
-        path: '$items',
-      },
+     quantity
     },
-    { $match: { 'items.prodId': new ObjectId(prodId) } },
-    {
-      $project: {
-        'items.quantity': 1,
-      },
-    },
-  ])
-
-  const quantity = data[0]?.items?.quantity
-  if (!quantity) {
-    throw new Error('Product not found')
-  }
-
-  if (inc) {
-    try {
-      await cartModel.updateOne(
-        { userId, 'items.prodId': prodId },
-        {
-          $inc: { 'items.$.quantity': 1 },
-        },
-      )
-      return { message: 'cart updated' }
-    } catch (error:any) {
-      throw new Error(error)
-    }
-  } else if (Number(quantity) > 1) {
-    try {
-      await cartModel.updateOne(
-        { userId, 'items.prodId': prodId },
-        {
-          $inc: { 'items.$.quantity': -1 },
-        },
-      )
-      return { message: 'cart updated' }
-    } catch (error:any) {
-      throw new Error(error)
-    }
-  } else {
-    const { cartCount } = await getCartByUserId(userId)
-    if (Number(cartCount) > 1) {
-      return await removeProductFromCart(userId, prodId)
-    } else {
-      await cartModel.deleteOne({ userId })
-      return { message: 'Cart removed' }
-    }
-  }
+  )
+  return { message: 'cart updated' }
 }
 
 export const cartService = {

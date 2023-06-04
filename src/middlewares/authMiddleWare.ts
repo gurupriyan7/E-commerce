@@ -8,6 +8,8 @@ const protect = async (
   res: Response,
   next: NextFunction,
 ) => {
+
+  
   let token: any
   if (
     req.headers.authorization &&

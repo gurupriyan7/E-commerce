@@ -53,12 +53,13 @@ const updateCart = async (req:RequestType,res:Response)=>{
     if(!req?.user){
       throw new Error("User Not Found")
     }
-    const { prodId, inc=false, quantity } = req.query
+    console.log(req.body,"rewq");
+    
+    const { prodId } = req.query
     const data = await cartService.updateCart({
       userId: req.user?._id,
       prodId: prodId as string,
-     inc : inc as boolean,
-      quantity :quantity as unknown as number,
+     quantity: Number(req?.body?.quantity)
     })
     return responseUtils.success(res, {
       data,

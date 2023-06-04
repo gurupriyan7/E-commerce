@@ -14,7 +14,7 @@ const {
 
 router.post('/',protect, addedToCart)
 router.get('/user',protect, getCartByUserId)
-router.patch('/remove',protect, removeProductFromCart)
 router.patch('/',protect, updateCart)
+router.patch('/remove',protect, removeProductFromCart)
 
 export default router
